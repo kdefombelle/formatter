@@ -34,13 +34,8 @@ public class FormatterRouteBuilder extends RouteBuilder{
 		from("direct:splitxml")
 		.routeId(ROUTE_SPLIT_XML)
 		.log("Splitting file [${in.header.CamelFileName}]")
-		
-		//.split(xpath("/TRADELIST/FXFWD"))
-		//.log("${body}");
-
 		//from http://www.davsclaus.com/2011/11/splitting-big-xml-files-with-apache.html
     	.split().tokenizeXML(simple("{{input.xml.split.element}}").getText()).streaming()
-    	//.threads(20)
     	.setHeader("TradeId").xpath("/{{input.xml.split.element}}/TradeId/text()")
        	//TODO:add a counter
        	.setHeader(Exchange.OVERRULE_FILE_NAME, simple("${in.header.TradeId}.xml"))
